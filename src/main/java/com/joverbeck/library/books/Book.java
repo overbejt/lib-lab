@@ -13,7 +13,7 @@ public class Book {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String title;
-	private Long ISBN;
+	private String ISBN;
 	
 	// Default Constructor
 	public Book() {
@@ -21,7 +21,7 @@ public class Book {
 	}  // End of the default Constructor
 	
 	// Overloaded Constructor 
-	public Book(Long id, String title, Long ISBN) {
+	public Book(Long id, String title, String ISBN) {
 		this.id = id;
 		this.title = title;
 		this.ISBN = ISBN;
@@ -68,7 +68,7 @@ public class Book {
 	 * 
 	 * @return  The ISBN for this book.
 	 */
-	public Long getISBN() {
+	public String getISBN() {
 		return ISBN;
 	}  // End of the 'getISBN' method
 	
@@ -77,7 +77,7 @@ public class Book {
 	 * 
 	 * @param ISBN  The new ISBN for this book.
 	 */
-	public void setISBN(Long ISBN) {
+	public void setISBN(String ISBN) {
 		this.ISBN = ISBN;
 	}  // End of the 'setISBN' method 
 	

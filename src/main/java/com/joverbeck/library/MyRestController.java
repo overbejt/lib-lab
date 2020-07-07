@@ -15,7 +15,7 @@ public class MyRestController {
 	
 	@GetMapping("/api/book1")
 	public Book getBook() {
-		Book book = new Book(12L, "White Fangs", 1234567891011L);
+		Book book = new Book(12L, "White Fangs", "1234567891011L");
 		return book;
 	}  // End of the 'getBook' method
 	
