@@ -30,12 +30,13 @@ public class UserController {
 	@PostMapping("/sign-up")
 	public ResponseEntity<?> signup (@RequestBody MyUser user) {
 		// Check if the user does not exist
-		if (myUserRepository.findByUsername(user.getUsername()) != null) {
+		if (myUserRepository.findByUsername(user.getUsername()) == null) {
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			myUserRepository.save(user);
 			System.out.println("=== New user was created ===");
 			return ResponseEntity.ok("{}");
 		}
+		System.out.println("=== Username already in use ===");
 		// When it does exist, send back a bad request with error message
 		String errorMsg = "{\"message\" : \"Username already in use.\"}";
 		return ResponseEntity.badRequest().body(errorMsg);
