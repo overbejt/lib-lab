@@ -69,8 +69,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis() + MAX_TIME))
                 .sign(HMAC512(SECRET_KEY.getBytes()));
         res.addHeader(HEADER, AUTH_PREFIX + token);
+        // Add the token to the response body
         res.addHeader("Content-Type", "application/json");
-        String outToken = "{'token' : '" + token + "'}";
+        String outToken = "{\"token\" : \"" + token + "\"}";
         res.getOutputStream().write(outToken.getBytes());  // Set the token in the body
     }  // End of the 'successfulAuthentication' method
 }  // End of the 'JWTAuthenticationFilter' class
