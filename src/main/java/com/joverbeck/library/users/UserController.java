@@ -29,10 +29,16 @@ public class UserController {
 	 */
 	@PostMapping("/sign-up")
 	public ResponseEntity<?> signup (@RequestBody MyUser user) {
-		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		myUserRepository.save(user);
-		System.out.println("=== New user was created ===");
-		return ResponseEntity.ok("{}");
+		// Check if the user does not exist
+		if (myUserRepository.findByUsername(user.getUsername()) != null) {
+			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+			myUserRepository.save(user);
+			System.out.println("=== New user was created ===");
+			return ResponseEntity.ok("{}");
+		}
+		// When it does exist, send back a bad request with error message
+		String errorMsg = "{\"message\" : \"Username already in use.\"}";
+		return ResponseEntity.badRequest().body(errorMsg);
 	}  // End of the 'signup' method
 	
 }  // End of the 'UserController' class
