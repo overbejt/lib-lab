@@ -66,14 +66,15 @@ public class BookController {
 			Assert.notNull(originalBook, "Book Not Found!");
 		} catch (Exception e) {
 			// When it does exist, send back a bad request with error message
-			String errorMsg = "{\"message\" : \"Book Not Found.\"}";
-			return ResponseEntity.badRequest().body(errorMsg);
+//			String errorMsg = "{\"message\" : \"Book Not Found.\"}";
+//			return ResponseEntity.badRequest().body(errorMsg);
+			return ResponseEntity.notFound().build();
 		}
 		// Set the id to the new book object
 		book.setId(originalBook.getId());
 		// Put the new book into the repository
 		bookRepository.save(book);
-		return ResponseEntity.ok("{}");
+		return ResponseEntity.ok().build();
 	}  // End of the 'updateBook' method
 	
 	/**
@@ -92,11 +93,12 @@ public class BookController {
 		} catch (Exception e) {
 			// When it does exist, send back a bad request with error message
 			String errorMsg = "{\"message\" : \"Book Not Found.\"}";
-			return ResponseEntity.badRequest().body(errorMsg);
+			return ResponseEntity.notFound().build();
+//			return ResponseEntity.badRequest().body(errorMsg);
 		}
 		// Delete the book
 		bookRepository.delete(originalBook);
-		return ResponseEntity.ok("{}");	
+		return ResponseEntity.ok().build();	
 	}  // End of the 'deleteBook' method
 	
 }  // End of the 'BookController' class
