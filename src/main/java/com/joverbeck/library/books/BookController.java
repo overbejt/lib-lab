@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/books")
+//@RequestMapping("/books")
 public class BookController {
 	
 	// Declaring a state variable to hold the book repository object
@@ -36,7 +36,7 @@ public class BookController {
 	 * 
 	 * @return A list of all the books in the repository.
 	 */
-	@GetMapping()
+	@GetMapping("/books")
 	public List<Book> getAllBooks() {
 		return bookRepository.findAll();
 	}  // End of the 'getAllBooks' method
@@ -46,7 +46,7 @@ public class BookController {
 	 * 
 	 * @param book The new book that is supposed to be added to the repository.
 	 */
-	@PostMapping()
+	@PostMapping("/books")
 	public void addBook(@RequestBody Book book) {
 		bookRepository.save(book);
 	}  // End of the 'addBook' method
@@ -57,11 +57,11 @@ public class BookController {
 	 * @param id The id of the book.
 	 * @param book The book object that needs to be updated.
 	 */
-	@PutMapping()
-	public ResponseEntity<?> updateBook(@RequestBody Book book) {
-		System.out.println("=== Updating book: " + book.getId() + " ===");
+	@PutMapping("/books/{id}")
+	public ResponseEntity<?> updateBook(@PathVariable long id, @RequestBody Book book) {
+		System.out.println("=== Updating book: " + id + " ===");
 		// Get the book from the repository
-		Book originalBook = bookRepository.findById(book.getId()).get();
+		Book originalBook = bookRepository.findById(id).get();
 		try {
 			// Verify that it is not null, otherwise send an error message back
 			Assert.notNull(originalBook, "Book Not Found!");
