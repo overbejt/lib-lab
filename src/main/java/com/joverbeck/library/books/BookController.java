@@ -59,6 +59,7 @@ public class BookController {
 	 */
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateBook(@PathVariable long id, @RequestBody Book book) {
+		System.out.println("=== Updating book: " + id + " ===");
 		// Get the book from the repository
 		Book originalBook = bookRepository.findById(id).get();
 		try {
