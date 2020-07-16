@@ -2,6 +2,7 @@ package com.joverbeck.library.books;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,15 +58,22 @@ public class BookController {
 	 * @param book The book object that needs to be updated.
 	 */
 	@PutMapping("/{id}")
-	public void updateBook(@PathVariable long id, @RequestBody Book book) {
+	public ResponseEntity<?> updateBook(@PathVariable long id, @RequestBody Book book) {
 		// Get the book from the repository
 		Book originalBook = bookRepository.findById(id).get();
-		// Verify that it is not null, otherwise send an error message back
-		Assert.notNull(originalBook, "Book Not Found!");
+		try {
+			// Verify that it is not null, otherwise send an error message back
+			Assert.notNull(originalBook, "Book Not Found!");
+		} catch (Exception e) {
+			// When it does exist, send back a bad request with error message
+			String errorMsg = "{\"message\" : \"Book Not Found.\"}";
+			return ResponseEntity.badRequest().body(errorMsg);
+		}
 		// Set the id to the new book object
 		book.setId(originalBook.getId());
 		// Put the new book into the repository
 		bookRepository.save(book);
+		return ResponseEntity.ok("{}");
 	}  // End of the 'updateBook' method
 	
 	/**
@@ -75,13 +83,20 @@ public class BookController {
 	 * @param book The book object that needs to be deleted.
 	 */
 	@DeleteMapping("/{id}")
-	public void deleteBook(@PathVariable long id, @RequestBody Book book) {
+	public ResponseEntity<?> deleteBook(@PathVariable long id, @RequestBody Book book) {
 		// Get the book from the repository
 		Book originalBook = bookRepository.findById(id).get();
-		// Verify that it is not null, otherwise send an error message back
-		Assert.notNull(originalBook, "Book Not Found!");
+		try {
+			// Verify that it is not null, otherwise send an error message back
+			Assert.notNull(originalBook, "Book Not Found!");
+		} catch (Exception e) {
+			// When it does exist, send back a bad request with error message
+			String errorMsg = "{\"message\" : \"Book Not Found.\"}";
+			return ResponseEntity.badRequest().body(errorMsg);
+		}
 		// Delete the book
 		bookRepository.delete(originalBook);
+		return ResponseEntity.ok("{}");	
 	}  // End of the 'deleteBook' method
 	
 }  // End of the 'BookController' class
