@@ -57,18 +57,16 @@ public class BookController {
 	 * @param id The id of the book.
 	 * @param book The book object that needs to be updated.
 	 */
-	@PutMapping("/{id}")
-	public ResponseEntity<?> updateBook(@PathVariable long id, @RequestBody Book book) {
-		System.out.println("=== Updating book: " + id + " ===");
+	@PutMapping()
+	public ResponseEntity<?> updateBook(@RequestBody Book book) {
+		System.out.println("=== Updating book: " + book.getId() + " ===");
 		// Get the book from the repository
-		Book originalBook = bookRepository.findById(id).get();
+		Book originalBook = bookRepository.findById(book.getId()).get();
 		try {
 			// Verify that it is not null, otherwise send an error message back
 			Assert.notNull(originalBook, "Book Not Found!");
 		} catch (Exception e) {
-			// When it does exist, send back a bad request with error message
-//			String errorMsg = "{\"message\" : \"Book Not Found.\"}";
-//			return ResponseEntity.badRequest().body(errorMsg);
+			// When it does exist, send back a bad request with error messaged
 			return ResponseEntity.notFound().build();
 		}
 		// Set the id to the new book object
@@ -85,7 +83,7 @@ public class BookController {
 	 * @param book The book object that needs to be deleted.
 	 */
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteBook(@PathVariable long id, @RequestBody Book book) {
+	public ResponseEntity<?> deleteBook(@PathVariable long id) {
 		// Get the book from the repository
 		Book originalBook = bookRepository.findById(id).get();
 		try {
@@ -93,9 +91,7 @@ public class BookController {
 			Assert.notNull(originalBook, "Book Not Found!");
 		} catch (Exception e) {
 			// When it does exist, send back a bad request with error message
-			String errorMsg = "{\"message\" : \"Book Not Found.\"}";
 			return ResponseEntity.notFound().build();
-//			return ResponseEntity.badRequest().body(errorMsg);
 		}
 		// Delete the book
 		bookRepository.delete(originalBook);

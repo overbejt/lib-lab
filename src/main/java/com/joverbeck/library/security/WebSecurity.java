@@ -29,11 +29,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
-                // Allowing CRUD for /books
-                .antMatchers(HttpMethod.POST, "/books").authenticated()
-                .antMatchers(HttpMethod.GET, "/books").authenticated()
-                .antMatchers(HttpMethod.PUT, "/books/**").authenticated()
-                .antMatchers(HttpMethod.DELETE, "/books/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
