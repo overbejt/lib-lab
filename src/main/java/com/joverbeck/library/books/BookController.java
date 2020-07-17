@@ -58,7 +58,7 @@ public class BookController {
 	 * @param id The id of the book.
 	 * @param book The book object that needs to be updated.
 	 */
-//	@CrossOrigin(origins = "http://localhost:9000")
+	@CrossOrigin(origins = "http://localhost:9000")
 	@PutMapping("/books/{id}")
 	public ResponseEntity<?> updateBook(@PathVariable long id, @RequestBody Book book) {
 		System.out.println("=== Updating book: " + id + " ===");
