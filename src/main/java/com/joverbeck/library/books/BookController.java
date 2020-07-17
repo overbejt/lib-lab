@@ -62,7 +62,16 @@ public class BookController {
 	public ResponseEntity<?> updateBook(@PathVariable long id, @RequestBody Book book) {
 		
 		System.out.println("=== Updating book: " + id + " ===");
-		
+		// Check if adding a new book
+		if (id < 0) {
+			// Reset the id
+			book.setId(null);
+			// Add the book
+			addBook(book);
+			// Send back 200 response
+			return ResponseEntity.ok().build();
+		}
+		// Otherwise, update the book
 		Book originalBook;
 		try {
 			// Get the book from the repository
@@ -71,6 +80,7 @@ public class BookController {
 			book.setId(originalBook.getId());
 			// Put the new book into the repository
 			bookRepository.save(book);
+			// Send back 200 response
 			return ResponseEntity.ok().build();
 		} catch (Exception e) {
 			// When it does not exist, send back a bad request with error messaged
@@ -84,7 +94,7 @@ public class BookController {
 	 * @param id The id of the book.
 	 * @param book The book object that needs to be deleted.
 	 */
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/books/{id}")
 	public ResponseEntity<?> deleteBook(@PathVariable long id) {
 		
 		System.out.println("=== Deleting book: " + id + " ===");
