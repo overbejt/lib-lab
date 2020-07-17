@@ -34,9 +34,8 @@ public class UserController {
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			myUserRepository.save(user);
 			System.out.println("=== New user was created ===");
-			return ResponseEntity.ok("{}");
+			return ResponseEntity.ok().build();
 		}
-		System.out.println("=== Username already in use ===");
 		// When it does exist, send back a bad request with error message
 		String errorMsg = "{\"message\" : \"Username already in use.\"}";
 		return ResponseEntity.badRequest().body(errorMsg);
