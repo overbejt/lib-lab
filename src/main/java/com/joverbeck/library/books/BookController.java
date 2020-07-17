@@ -58,24 +58,24 @@ public class BookController {
 	 * @param id The id of the book.
 	 * @param book The book object that needs to be updated.
 	 */
-	@CrossOrigin(origins = "http://localhost:9000")
 	@PutMapping("/books/{id}")
 	public ResponseEntity<?> updateBook(@PathVariable long id, @RequestBody Book book) {
+		
 		System.out.println("=== Updating book: " + id + " ===");
-		// Get the book from the repository
-		Book originalBook = bookRepository.findById(id).get();
+		
+		Book originalBook;
 		try {
-			// Verify that it is not null, otherwise send an error message back
-			Assert.notNull(originalBook, "Book Not Found!");
+			// Get the book from the repository
+			originalBook = bookRepository.findById(id).get();
+			// Set the id to the new book object
+			book.setId(originalBook.getId());
+			// Put the new book into the repository
+			bookRepository.save(book);
+			return ResponseEntity.ok().build();
 		} catch (Exception e) {
-			// When it does exist, send back a bad request with error messaged
+			// When it does not exist, send back a bad request with error messaged
 			return ResponseEntity.notFound().build();
-		}
-		// Set the id to the new book object
-		book.setId(originalBook.getId());
-		// Put the new book into the repository
-		bookRepository.save(book);
-		return ResponseEntity.ok().build();
+		}				
 	}  // End of the 'updateBook' method
 	
 	/**
@@ -86,18 +86,20 @@ public class BookController {
 	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteBook(@PathVariable long id) {
-		// Get the book from the repository
-		Book originalBook = bookRepository.findById(id).get();
+		
+		System.out.println("=== Deleting book: " + id + " ===");
+		
+		Book originalBook;
 		try {
-			// Verify that it is not null, otherwise send an error message back
-			Assert.notNull(originalBook, "Book Not Found!");
+			// Get the book from the repository
+			originalBook = bookRepository.findById(id).get();
+			// Delete the book
+			bookRepository.delete(originalBook);
+			return ResponseEntity.ok().build();
 		} catch (Exception e) {
 			// When it does exist, send back a bad request with error message
 			return ResponseEntity.notFound().build();
-		}
-		// Delete the book
-		bookRepository.delete(originalBook);
-		return ResponseEntity.ok().build();	
+		}			
 	}  // End of the 'deleteBook' method
 	
 }  // End of the 'BookController' class
