@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v2/users")
 public class UserController {
 	// State variables
 	private MyUserRepository myUserRepository;
@@ -36,7 +36,7 @@ public class UserController {
 			System.out.println("=== New user was created ===");
 			return ResponseEntity.ok().build();
 		}
-		// When it does exist, send back a bad request with error message
+		// When it does not exist, send back a bad request with error message
 		String errorMsg = "{\"message\" : \"Username already in use.\"}";
 		return ResponseEntity.badRequest().body(errorMsg);
 	}  // End of the 'signup' method

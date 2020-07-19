@@ -2,9 +2,8 @@ package com.joverbeck.library.books;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-//@RequestMapping("/books")
+@RequestMapping("/api/v2/books")
 public class BookController {
 	
 	// Declaring a state variable to hold the book repository object
@@ -31,25 +30,47 @@ public class BookController {
 		this.bookRepository = bookRepository;
 	}  // End of the Constructor
 	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getBookById(@PathVariable long id) {
+		System.out.println("=== Retrieving book: " + id + " ===");
+		try {
+			// Get the book
+			Book resultBook = bookRepository.findById(id).get();		
+			// Otherwise, Send the book back with OK status
+			return new ResponseEntity<Book>(resultBook, HttpStatus.OK);
+		} catch (Exception e) {
+			// Send back not found
+			return ResponseEntity.notFound().build();
+		}
+	}  // End of the 'getBookById' method
+	
 	/**
 	 * This is the method that will grab all of the books from the repository 
 	 * and send them back as a list.
 	 * 
 	 * @return A list of all the books in the repository.
 	 */
-	@GetMapping("/books")
+	@GetMapping("")
 	public List<Book> getAllBooks() {
+		System.out.println("=== Retrieving all books ===");
 		return bookRepository.findAll();
 	}  // End of the 'getAllBooks' method
+	
 	
 	/**
 	 * This is the method that will add a new book into the repository.
 	 * 
 	 * @param book The new book that is supposed to be added to the repository.
 	 */
-	@PostMapping("/books")
-	public void addBook(@RequestBody Book book) {
-		bookRepository.save(book);
+	@PostMapping("")
+	public ResponseEntity<?> addBook(@RequestBody Book book) {
+		System.out.println("=== Book saved ===");
+		try {
+			bookRepository.save(book);
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}  // End of the 'addBook' method
 	
 	/**
@@ -58,7 +79,7 @@ public class BookController {
 	 * @param id The id of the book.
 	 * @param book The book object that needs to be updated.
 	 */
-	@PutMapping("/books/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> updateBook(@PathVariable long id, @RequestBody Book book) {
 		
 		System.out.println("=== Updating book: " + id + " ===");
@@ -94,7 +115,7 @@ public class BookController {
 	 * @param id The id of the book.
 	 * @param book The book object that needs to be deleted.
 	 */
-	@DeleteMapping("/books/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteBook(@PathVariable long id) {
 		
 		System.out.println("=== Deleting book: " + id + " ===");
